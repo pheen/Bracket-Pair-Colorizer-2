@@ -35,8 +35,8 @@ export default class SingularBracketGroup implements IBracketManager {
         return this.allBracketsOnLine;
     }
 
-    public addOpenBracket(token: Token, colorIndex: number) {
-        const openBracket = new Bracket(token, this.settings.colors[colorIndex]);
+    public addOpenBracket(token: Token, color: string, colorIndex: number) {
+        const openBracket = new Bracket(token, color);
         this.allLinesOpenBracketStack.push(openBracket);
         this.allBracketsOnLine.push(openBracket);
         this.bracketsHash += openBracket.token.character;
@@ -82,6 +82,10 @@ export default class SingularBracketGroup implements IBracketManager {
 
     public getHash() {
         return this.bracketsHash;
+    }
+
+    public getColors(_token: Token): string[] {
+        return this.settings.colors;
     }
 
     public offset(startIndex: number, amount: number) {

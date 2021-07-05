@@ -20,6 +20,7 @@ export default class Settings {
     public readonly showBracketsInRuler: boolean;
     public readonly scopeLineRelativePosition: boolean;
     public readonly colors: string[];
+    public readonly independentColors: { [key: string]: string[] }[];
     public readonly unmatchedScopeColor: string;
     public readonly excludedLanguages: Set<string>;
     public isDisposed = false;
@@ -131,6 +132,11 @@ export default class Settings {
         this.colors = configuration.get("colors") as string[];
         if (!Array.isArray(this.colors)) {
             throw new Error("colors is not an array");
+        }
+
+        this.independentColors = configuration.get("independentColors") as { [key: string]: string[] }[];
+        if (typeof this.independentColors !== "object" || this.independentColors === null) {
+            throw new Error("independentColors is not an object");
         }
 
         this.bracketDecorations = this.createBracketDecorations();
@@ -263,18 +269,29 @@ export default class Settings {
         const decorations = new Map<string, vscode.TextEditorDecorationType>();
 
         for (const color of this.colors) {
-            const decoration = vscode.window.createTextEditorDecorationType({
-                color: color.includes(".") ? new ThemeColor(color) : color,
-                rangeBehavior: vscode.DecorationRangeBehavior.ClosedClosed,
-            });
-            decorations.set(color, decoration);
+            decorations.set(color, this.buildDecoration(color));
         }
 
-        const unmatchedDecoration = vscode.window.createTextEditorDecorationType({
-            color: this.unmatchedScopeColor, rangeBehavior: vscode.DecorationRangeBehavior.ClosedClosed,
-        });
+        const independentCharacters = Object.keys(this.independentColors);
+
+        if (independentCharacters.length > 0) {
+            for (let character of independentCharacters) {
+                for (const color of this.independentColors[character]) {
+                    decorations.set(color, this.buildDecoration(color));
+                }
+            }
+        }
+
+        const unmatchedDecoration = this.buildDecoration(this.unmatchedScopeColor);
         decorations.set(this.unmatchedScopeColor, unmatchedDecoration);
 
         return decorations;
+    }
+
+    private buildDecoration(color: string) {
+        return vscode.window.createTextEditorDecorationType({
+            color: color.includes(".") ? new ThemeColor(color) : color,
+            rangeBehavior: vscode.DecorationRangeBehavior.ClosedClosed,
+        });
     }
 }

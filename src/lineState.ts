@@ -82,23 +82,24 @@ export default class LineState {
 
     private addOpenBracket(token: Token) {
         let colorIndex: number;
+        const colors = this.bracketManager.getColors(token);
 
         if (this.settings.forceIterationColorCycle) {
-            colorIndex = (this.bracketManager.getPreviousIndex(token.type) + 1) % this.settings.colors.length;
+            colorIndex = (this.bracketManager.getPreviousIndex(token.type) + 1) % colors.length;
         }
         else {
-            colorIndex = this.bracketManager.GetAmountOfOpenBrackets(token.type) % this.settings.colors.length;
+            colorIndex = this.bracketManager.GetAmountOfOpenBrackets(token.type) % colors.length;
         }
 
-        let color = this.settings.colors[colorIndex];
+        let color = colors[colorIndex];
 
         if (this.settings.forceUniqueOpeningColor && color === this.previousBracketColor) {
-            colorIndex = (colorIndex + 1) % this.settings.colors.length;
-            color = this.settings.colors[colorIndex];
+            colorIndex = (colorIndex + 1) % colors.length;
+            color = colors[colorIndex];
         }
 
         this.previousBracketColor = color;
-        this.bracketManager.addOpenBracket(token, colorIndex);
+        this.bracketManager.addOpenBracket(token, color, colorIndex);
     };
 
     private addCloseBracket(token: Token) {

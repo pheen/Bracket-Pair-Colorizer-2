@@ -39,8 +39,8 @@ export default class MultipleBracketGroups implements IBracketManager {
         return this.previousOpenBracketColorIndexes[type];
     }
 
-    public addOpenBracket(token: Token, colorIndex: number) {
-        const openBracket = new Bracket(token, this.settings.colors[colorIndex]);
+    public addOpenBracket(token: Token, color: string, colorIndex: number) {
+        const openBracket = new Bracket(token, color);
         this.allBracketsOnLine.push(openBracket);
         this.bracketsHash += openBracket.token.character;
 
@@ -89,6 +89,15 @@ export default class MultipleBracketGroups implements IBracketManager {
 
     public getAllBrackets(): Bracket[] {
         return this.allBracketsOnLine;
+    }
+
+    public getColors(token: Token): string[] {
+        if (Object.keys(this.settings.independentColors).length > 0) {
+            const characterColors = this.settings.independentColors[token.character];
+            return characterColors || this.settings.colors;
+        } else {
+            return this.settings.colors;
+        }
     }
 
     public getHash() {

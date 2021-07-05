@@ -56,6 +56,12 @@
                     "description": "Scope colors",
                     "scope": "window"
                 },
+                "bracket-pair-colorizer-2.independentColors": {
+                    "type": "array",
+                    "default": {},
+                    "description": "Character independent scope colors",
+                    "scope": "window"
+                },
                 "bracket-pair-colorizer-2.unmatchedScopeColor": {
                     "type": "string",
                     "default": "Red",
