@@ -44,7 +44,7 @@ Independent brackets allow each bracket type to use its own color pool
 ![Independent](images/independentExample.png "Independent Example")
 
 > `"bracket-pair-colorizer-2.independentColors"`
-Override the colors used for a particular bracket character. Accepts valid color names, hex codes, and `rgba()` values.
+Override the colors used for a particular bracket character when `"bracket-pair-colorizer-2.colorMode"` is set to `"Independent"`. Accepts valid color names, hex codes, and `rgba()` values.
 ```json
 "bracket-pair-colorizer-2.independentColors": {
     "(": [ "#808080", "#6DEDED", "#A2EEEE", "#D7EEEE" ],
@@ -52,6 +52,7 @@ Override the colors used for a particular bracket character. Accepts valid color
     "{": [ "#D46DED", "#E39FEE", "#F2D0EF" ]
 },
 ```
+![image](https://user-images.githubusercontent.com/1145873/124519901-9e482980-dd9f-11eb-9894-911de7c8f2d2.png)
 
 > `"bracket-pair-colorizer-2.highlightActiveScope"`  
 Should the currently scoped brackets always be highlighted?
